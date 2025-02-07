@@ -42,15 +42,6 @@ Este código analiza el movimiento de partículas en un fluido a partir de un vi
 - La detección de bordes del recipiente puede verse afectada por la perspectiva.
 - Se recomienda probar con distintos valores de `epsilon` para mejorar la resolución de los gráficos.
 
-## Ejemplo de Uso
-```python
-video = "ruta/al/video.mp4"
-frames = [get_frame(video, i) for i in range(10, 200)]
-displacement_data, blue_dots_data, dynamic_centers = calculate_displacement(frames, radius, min_intensity_top, min_intensity_bottom, max_intensity, initial_center)
-velocities = calculate_velocities(displacement_data, dt)
-radial_velocities = calculate_radial_velocities(velocities, blue_dots_data, dynamic_centers)
-avg_tangential_velocities, tangential_velocity_errors = average_filtered_tangential_velocity_by_radius(radial_velocities, blue_dots_data, dynamic_centers, epsilon)
-plot_avg_tangential_velocity_vs_radius(avg_tangential_velocities, tangential_velocity_errors)
-```
+
 
 
