@@ -18,7 +18,7 @@ Este código fue hecho para la práctica de Fluidos de la materia Laboratorio 5 
 ## Parámetros 
 
 - `video`: Ruta del video a analizar.
-- `radius`: Radio de detección de partículas. Se obtiene desde el vórtice al borde más cercano
+- `radius`: Radio de detección de partículas. Se obtiene con la distancia del vórtice al borde más cercano.
 - `initial_center_x, initial_center_y`: Coordenadas iniciales del centro dinámico. Por lo general termina siendo casi constante.
 - `min_intensity_top, min_intensity_bottom`: Umbrales de intensidad mínima para detección de partículas.
 - `dt`: Intervalo de tiempo entre frames (según FPS del video).
