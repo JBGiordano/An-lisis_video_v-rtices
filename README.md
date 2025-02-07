@@ -42,13 +42,6 @@ Este código analiza el movimiento de partículas en un fluido a partir de un vi
 - La detección de bordes del recipiente puede verse afectada por la perspectiva.
 - Se recomienda probar con distintos valores de `epsilon` para mejorar la resolución de los gráficos.
 
-## Requerimientos
-- `Python 3.x`
-- `OpenCV`
-- `NumPy`
-- `Matplotlib`
-- `skimage`
-
 ## Ejemplo de Uso
 ```python
 video = "ruta/al/video.mp4"
