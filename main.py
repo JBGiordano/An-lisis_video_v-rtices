@@ -247,8 +247,10 @@ def plot_avg_tangential_velocity_vs_radius(avg_tangential_velocities, tangential
     
     plt.figure()
     plt.errorbar(radii, np.abs(avg_vtheta)/np.max(np.abs(avg_vtheta)), yerr=errors/np.max(np.abs(avg_vtheta)), fmt='o', linestyle="none", capsize=5, capthick=1, elinewidth=1, color='b')
-    plt.xlabel('Radio (r)')
-    plt.ylabel('Velocidad tangencial promediada (vθ)')
+    plt.xlabel(r'Radio $r$')
+    plt.ylabel(r'$v_{\theta}/v_{\theta}^{max}$')
+    plt.xlabel(16)
+    plt.ylabel(16)
     plt.title('Velocidad Tangencial Promedio Vs Radio')
     plt.grid(True)
     plt.show()
@@ -307,10 +309,12 @@ def plot_avg_radial_velocity_vs_radius(avg_radial_velocities, radial_velocity_er
     errors = [radial_velocity_errors[r] for r in radii]
     
     plt.figure()
-    plt.errorbar(radii, avg_vr, yerr=errors, fmt='o', linestyle="none", capsize=5, capthick=1, elinewidth=1, color='r')
-    plt.xlabel('Radio (r)')
-    plt.ylabel('Velocidad radial promediada (vr)')
+    plt.errorbar(radii, np.abs(avg_vr)/np.abs(np.max(avg_vr)), yerr=errors/np.abs(np.max(avg_vr)), fmt='o', linestyle="none", capsize=5, capthick=1, elinewidth=1, color='r')
+    plt.xlabel('Radio $r$')
+    plt.ylabel(r'$v_{r}/v_{\theta}^{max}$')
     plt.title('Velocidad Radial Promedio Vs Radio')
+    plt.xlabel(16)
+    plt.ylabel(16)
     plt.grid(True)
     plt.show()
     
