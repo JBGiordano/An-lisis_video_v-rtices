@@ -307,10 +307,10 @@ def plot_avg_radial_velocity_vs_radius(avg_radial_velocities, radial_velocity_er
     errors = [radial_velocity_errors[r] for r in radii]
     
     plt.figure()
-    plt.errorbar(radii, np.abs(avg_vr)/np.abs(np.max(avg_vr)), yerr=errors/np.abs(np.max(avg_vr)), fmt='o', linestyle="none", capsize=5, capthick=1, elinewidth=1, color='r')
-    plt.xlabel('Radio $r$',fontsize = 16)
+    plt.errorbar(radii, avg_vr/np.abs(np.max(avg_vr)), yerr=errors/np.abs(np.max(avg_vr)), fmt='o', linestyle="none", capsize=5, capthick=1, elinewidth=1, color='r')
+    plt.xlabel('Radio $r$')
     plt.ylabel(r'$v_{r}/v_{\theta}^{max}$',fontsize = 16)
-    plt.title('Velocidad Radial Promedio Vs Radio')
+    plt.title('Velocidad Radial Promedio Vs Radio',fontsize = 16)
     plt.grid(True)
     plt.show()
     
