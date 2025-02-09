@@ -376,24 +376,33 @@ Consideraciones:
     min_intensity_top = 0.4
 '''
 
-video = r"/home/juan/Documents/Laboratorio 5/videos 2/0%/0_1.mp4"
-
-frames = [get_frame(video, i) for i in range(10,200)]
-
-radius = 441
-initial_center_x = 938
-initial_center_y = 562
-
-min_intensity_botton = 0.2
-min_intensity_top = 0.3
-max_intensity = 1
-dt = 1 / 60
-epsilon = 3
+video = r"/home/juan/Documents/Laboratorio 5/videos 3/70_82.mp4"
 
 im = get_frame(video, 20)
 plt.imshow(im)
 plt.title('Frame Original')
 plt.show()
+#%% Parámetros
+
+radius = 319
+initial_center_x = 931
+initial_center_y = 522
+
+min_intensity_botton = 0.6
+min_intensity_top = 0.7
+max_intensity = 1
+dt = 1 / 60
+epsilon = 3
+#%% Primer frame para obtener el centro
+
+plt.imshow(im)
+plt.title('Frame Original')
+plt.show()
+#%% Calibración de los umbrales
+
+filtro(im, min_intensity_top, min_intensity_botton, max_intensity,True) 
+#%%
+frames = [get_frame(video, i) for i in range(20,220)]
 
 initial_center = (initial_center_x, initial_center_y)
 displacement_data, blue_dots_data, dynamic_centers = calculate_displacement(frames, radius, min_intensity_top,min_intensity_botton, max_intensity, initial_center)
