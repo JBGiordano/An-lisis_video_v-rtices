@@ -379,9 +379,6 @@ Consideraciones:
 video = r"/home/juan/Documents/Laboratorio 5/videos 3/70_82.mp4"
 
 im = get_frame(video, 20)
-plt.imshow(im)
-plt.title('Frame Original')
-plt.show()
 #%% Parámetros
 
 radius = 319
