@@ -18,8 +18,8 @@ Este código fue hecho para la práctica de Fluidos de la materia Laboratorio 5 
 ## Parámetros 
 
 - `video`: Ruta del video a analizar.
-- `radius`: Radio de detección de partículas. Se obtiene con la distancia del vórtice al borde más cercano.
-- `initial_center_x, initial_center_y`: Coordenadas iniciales del centro dinámico. Por lo general termina siendo casi constante.
+- `initial_center_x, initial_center_y`: Coordenadas iniciales del centro dinámico. Se determinan a mano buscando el centro del vórtice.
+- `radius`: Radio de detección de partículas. Se obtiene con la distancia del vórtice al borde más cercano, también a mano.
 - `min_intensity_top, min_intensity_bottom`: Umbrales de intensidad mínima para detección de partículas.
 - `dt`: Intervalo de tiempo entre frames (según FPS del video).
 - `epsilon`: Tamaño de los anillos radiales para calcular las velocidades.
@@ -28,8 +28,9 @@ Este código fue hecho para la práctica de Fluidos de la materia Laboratorio 5 
 ## Notas Importantes
 - Los parámetros `radius,initial_center_x, initial_center_y` se calculan manualmente con la imagen generada del primer frame analizado.
 - Los valores de `min_intensity_top` y `min_intensity_bottom` necesitan ajustarse según la iluminación de cada video y la cantidad de trazador de la muestra.
-- La detección de bordes del recipiente puede verse afectada por la perspectiva del video. Esto debido a que mide únicamente el borde del recipiente y, por lo general, la superficie del fluido llega a mucho menos de la mitad de este. Ver como solucionar. Se podría medir para cada muestra el radio de la suerficie, y modificar el código para que tome este como borde.
 - Lo más importante de todo termina siendo medir bien. Procurar de grabar, si es con un celular, con flash prendido y cubriendo todo el recipiente para que no haya otro tipo de luz externa.
+- Intentar mejorar el tener que localizar el centro del vórtice y el radio a mano, es la única parte no automática del código.
+- La detección de bordes del recipiente puede verse afectada por la perspectiva del video. Esto debido a que mide únicamente el borde del recipiente y, por lo general, la superficie del fluido llega a mucho menos de la mitad de este. Ver como solucionar. Se podría medir para cada muestra el radio de la suerficie, y modificar el código para que tome este como borde.
 
 
 
