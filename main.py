@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from skimage.filters import unsharp_mask
 import os
 
+
 def get_frame(filename, index):
     counter = 0
     video = cv2.VideoCapture(filename)
@@ -19,7 +20,7 @@ def get_frame(filename, index):
     video.release()
     return None
 
-def filtro(frame, min_intensity_top, min_intensity_bottom, max_intensity, show_image=False):
+def filtro(frame, min_intensity_top, min_intensity_bottom, max_intensity,show_image=False):
     # Convert to grayscale
     im_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
@@ -50,8 +51,12 @@ def filtro(frame, min_intensity_top, min_intensity_bottom, max_intensity, show_i
         plt.figure(figsize=(10, 5))
         plt.imshow(thresholded_image, cmap='gray')
         plt.title('Unsharp Mask Response with Top and Bottom Thresholds')
-        plt.axis('off')
+        #plt.axis('off')
         plt.show()
+        
+    
+    
+    
     
     return thresholded_image
 
@@ -245,7 +250,7 @@ def plot_avg_tangential_velocity_vs_radius(avg_tangential_velocities, tangential
     avg_vtheta = [avg_tangential_velocities[r] for r in radii]
     errors = [tangential_velocity_errors.get(r, 0) for r in radii]
     
-    plt.figure()
+    plt.figure(3)
     plt.errorbar(radii, np.abs(avg_vtheta)/np.max(np.abs(avg_vtheta)), yerr=errors/np.max(np.abs(avg_vtheta)), fmt='o', linestyle="none", capsize=5, capthick=1, elinewidth=1, color='b')
     plt.xlabel(r'Radio $r$',fontsize = 16)
     plt.ylabel(r'$v_{\theta}/v_{\theta}^{max}$',fontsize = 16)
@@ -306,7 +311,7 @@ def plot_avg_radial_velocity_vs_radius(avg_radial_velocities, radial_velocity_er
     avg_vr = [avg_radial_velocities[r] for r in radii]
     errors = [radial_velocity_errors[r] for r in radii]
     
-    plt.figure()
+    plt.figure(6)
     plt.errorbar(radii, avg_vr/np.abs(np.max(avg_vr)), yerr=errors/np.abs(np.max(avg_vr)), fmt='o', linestyle="none", capsize=5, capthick=1, elinewidth=1, color='r')
     plt.xlabel('Radio $r$')
     plt.ylabel(r'$v_{r}/v_{\theta}^{max}$',fontsize = 16)
@@ -329,7 +334,7 @@ def detect_circle_edges(image, show_image=False):
 
     # Umbral para obtener bordes binarios
     _, binary_edges = cv2.threshold(edges, 50, 255, cv2.THRESH_BINARY)
-
+    plt.figure(9)
     if show_image:
         plt.imshow(binary_edges, cmap='gray')
         plt.title('Bordes del círculo')
@@ -372,34 +377,64 @@ Consideraciones:
     - Epsilon es la cantidad de píxeles que va a contener cada radio para los gráficos. Toma para hacer los gráficos anillos
     de 'r+epsilon'.
     
-    min_intensity_botton = 0.6
+    min_intensity_botton = 0.6 
     min_intensity_top = 0.4
 '''
 
-video = r"/home/juan/Documents/Laboratorio 5/videos 3/70_82.mp4"
+nombre ="VID_20250213_190508748"
+ext = ".mp4"
+
+video = nombre + ext
+
+
 
 im = get_frame(video, 20)
-#%% Parámetros
+# Parámetros
 
-radius = 319
-initial_center_x = 931
-initial_center_y = 522
 
-min_intensity_botton = 0.6
-min_intensity_top = 0.7
+radius = 370
+initial_center_x = 1025
+initial_center_y = 631
+
+min_intensity_botton = 0.5
+min_intensity_top = 0.5
 max_intensity = 1
-dt = 1 / 60
-epsilon = 3
-#%% Primer frame para obtener el centro
+dt = 1 / 30
+epsilon = 2
 
+fig,ax = plt.subplots()
+
+# Create the circle
+circulo = plt.Circle((initial_center_x, initial_center_y), radius, color ="g", fill=False)
+# Add the circle to the axes
+ax.add_patch(circulo)
+
+# Primer frame para obtener el centro, lo muestra con una cruz y el radio en verde
+plt.Circle((initial_center_x, initial_center_y), radius, color ="g", fill=False)
+plt.axvline(x=initial_center_x, color='g', linestyle='--', label='x = 1000')  # Añadida línea vertical y leyenda
+plt.axhline(y=initial_center_y, color='g', linestyle='--', label='y = 588') 
 plt.imshow(im)
 plt.title('Frame Original')
 plt.show()
-#%% Calibración de los umbrales
 
+
+
+#%% Calibración de los umbrales
 filtro(im, min_intensity_top, min_intensity_botton, max_intensity,True) 
+
+
 #%%
-frames = [get_frame(video, i) for i in range(20,220)]
+
+"""
+Con esto verifico cuantos frames tiene el video para cambiar el tope en el for de abajo, la variable frames
+
+"""
+video1 = cv2.VideoCapture(video)
+frame_count = int(video1.get(cv2.CAP_PROP_FRAME_COUNT))
+print(frame_count)
+
+
+frames = [get_frame(video, i) for i in range(20,frame_count-1)] ##cambie 220 por frame_count
 
 initial_center = (initial_center_x, initial_center_y)
 displacement_data, blue_dots_data, dynamic_centers = calculate_displacement(frames, radius, min_intensity_top,min_intensity_botton, max_intensity, initial_center)
@@ -410,11 +445,13 @@ radial_velocities = calculate_radial_velocities(velocities, blue_dots_data, dyna
 # Calcular velocidad tangencial promedio por radio (ya filtrada)
 avg_tangential_velocities, tangential_velocity_errors = average_filtered_tangential_velocity_by_radius(radial_velocities, blue_dots_data, dynamic_centers, epsilon)
 
+
 # Plotear velocidad tangencial promedio vs. radio
 plot_avg_tangential_velocity_vs_radius(avg_tangential_velocities, tangential_velocity_errors)
 
 # Calcular velocidad radial promedio filtrada por radio
 avg_radial_velocities, radial_velocity_errors = average_filtered_radial_velocity_by_radius(radial_velocities, blue_dots_data, dynamic_centers, epsilon)
+
 
 # Plotear velocidad radial promedio vs. radio
 plot_avg_radial_velocity_vs_radius(avg_radial_velocities, radial_velocity_errors)
@@ -483,21 +520,60 @@ errorss_r_norm = pad_with_nan(errorss_r_norm, max_len)
 data = np.column_stack((radii_t, avg_vtheta_norm, errorss_t_norm, 
                         radii_r, avg_vtrad_norm, errorss_r_norm))
 #%%
-'''
+"""
 cambio de carpeta a la que quiero guardar
 Añado al txt las velocidades máximas y el factor de conversión como comentario al principio.
-'''
 
-os.chdir('/home/juan/Documents/Laboratorio 5/videos 2/20%') #carpeta en la que se guarda
-np.savetxt("20_1.csv", data, delimiter=",",
+"""
+os.chdir(r'C:\Users\publico\L5G8FLUIDOS\02') #carpeta en la que se guarda
+np.savetxt(f"{nombre}.csv", data, delimiter=",",
            header="radii_t // avg_vtheta_norm // errorss_t_norm // radii_r // avg_vtrad_norm // errorss_r_norm", 
            comments=f'ratio: {pixel_to_meter_ratio} cm/px \n max_vtheta:{np.max(avg_vtheta)}\n max_vratio: {np.max(avg_vrad)}\n ', fmt='%.4f')
 
+#%% para importar los datos de los archivos,
+nombres = ["VID_20250213_144224967","VID_20250213_163558985", "VID_20250213_1635589853",
+           "VID_20250213_1635589854","VID_20250213_1635589855"]
 
-#%% para importar
-data = np.loadtxt('40_1.csv', delimiter = ',', skiprows = 5)
+ext = ".csv"
 
+all_data = []
 
+##carga de datos en un diccionario 3d.
+for i in range(len(nombres)):
+    video = nombres[i] + ext
+    data = np.loadtxt(video, delimiter = ',', skiprows = 5)
+    
+    # los datos en vectores individuales
+    radii_t = data[:, 0]  # Radios en dirección theta
+    avg_vtheta_norm = data[:, 1]  # Velocidad angular promedio normalizada
+    errorss_t_norm = data[:, 2]  # Errores en la velocidad angular normalizada
+    radii_r = data[:, 3]  # Radios en dirección radial
+    avg_vtrad_norm = data[:, 4]  # Velocidad radial promedio normalizada
+    errorss_r_norm = data[:, 5]  # Errores en la velocidad radial normalizada
+
+    # Almacenar los datos en un diccionario
+    video_data = {
+        "radii_t": radii_t,
+        "avg_vtheta_norm": avg_vtheta_norm,
+        "errorss_t_norm": errorss_t_norm,
+        "radii_r": radii_r,
+        "avg_vtrad_norm": avg_vtrad_norm,
+        "errorss_r_norm": errorss_r_norm
+    }
+
+    all_data.append(video_data)  # Añadir los datos del video actual a la lista
+
+# Acceder a la información de un video específico
+video_index = 0  # Índice del video 
+video_data = all_data[video_index]
+
+print(f"Datos del video {nombres[video_index]}:")
+print(video_data["radii_t"])  # Radios en dirección theta
+print(video_data["avg_vtheta_norm"])  # Velocidad angular promedio normalizada
+print(video_data["errorss_t_norm"])  # Errores en la velocidad angular normalizada
+print(video_data["radii_r"])  # Radios en dirección radial
+print(video_data["avg_vtrad_norm"])  # Velocidad radial promedio normalizada
+print(video_data["errorss_r_norm"])  # Errores en la velocidad radial promedio normalizada
 
 
 
